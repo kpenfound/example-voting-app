@@ -5,7 +5,7 @@ import { dag, Container, Directory, object, func } from "@dagger.io/dagger"
 class Result {
 
   @func
-  build(dir: Directory): Container {
+  serve(dir: Directory, db: Service): Service {
     return dag
       .container()
       .from("node:18-slim")
@@ -21,7 +21,9 @@ class Result {
       .withDirectory("/usr/local/app", dir)
       .withExposedPort(80)
       .withEnvVariable("PORT", "80")
+      .withServiceBinding("db", db)
       .withEntrypoint(["/usr/bin/tini", "--"])
       .withExec(["node", "server.js"])
+      .asService()
   }
 }

@@ -3,7 +3,7 @@ from dagger import dag, function
 
 
 @function
-def build(dir: dagger.Directory) -> dagger.Container:
+def serve(dir: dagger.Directory, redis: dagger.Service) -> dagger.Service:
     return (
         dag.container().from_("python:3.11-slim")
         .with_exec(["apt-get", "update"])
@@ -14,5 +14,7 @@ def build(dir: dagger.Directory) -> dagger.Container:
         .with_exec(["pip", "install", "--no-cache-dir", "-r", "requirements.txt"])
         .with_directory("/usr/local/app", dir)
         .with_exposed_port(80)
-        .with_entrypoint(["python", "app.py"])
+        .with_service_binding("redis", redis)
+        .with_exec(["python", "app.py"])
+        .as_service()
     )

@@ -7,46 +7,44 @@ import (
 type Ci struct {}
 
 func (c *Ci) Serve(ctx context.Context, dir *Directory) (*Service, error) {
-	red := redis().AsService()
-	psql := postgres().AsService()
+	red := redis()
+	db := postgres()
 
 	// Vote needs redis
-	vote := dag.Vote().Build(dir).WithServiceBinding("redis", red)
+	vote := dag.Vote().Serve(dir.Directory("vote"), red)
 	// Result needs postgres
-	result := dag.Result().Build(dir).WithServiceBinding("db", psql)
+	result := dag.Result().Serve(dir.Directory("result"), db)
 	// Worker needs redis and postgres
-	worker := dag.Worker().Build(dir).
-		WithServiceBinding("redis", red).
-		WithServiceBinding("db", psql)
+	worker := dag.Worker().Serve(dir.Directory("worker"), red, db)
 
 	// Seed initial data
-	_, err := dag.Seed().Run(ctx, dir, psql)
-	if err != nil {
-		return nil, err
-	}
+// This causes a failure: https://github.com/dagger/dagger/issues/6493
+//	_, err := dag.Seed().Run(dir.Directory("seed-data"), vote).Sync(ctx)
+//	if err != nil {
+//		return nil, err
+//	}
 
-	// Proxy services
-	voteSvc := vote.AsService()
-	resultSvc := result.AsService()
-	workerSvc := worker.AsService()
 	proxy := dag.Proxy().
-		WithService(voteSvc, "vote", 5000, 80).
-		WithService(resultSvc, "result", 5001, 80).
-		WithService(workerSvc, "worker", 9999, 9999).
+		WithService(vote, "vote", 5000, 80).
+		WithService(result, "result", 5001, 80).
+		WithService(worker, "worker", 9999, 9999).
 		Service()
 
 	return proxy, nil
 }
 
 // A redis container
-func redis() *Container {
-	return dag.Container().From("redis:alpine").WithExposedPort(6379)
+func redis() *Service {
+	return dag.Container().From("redis:alpine").
+		WithExposedPort(6379).
+		AsService()
 }
 
 // A postgres container
-func postgres() *Container {
+func postgres() *Service {
 	return dag.Container().From("postgres:15-alpine").
 		WithEnvVariable("POSTGRES_USER", "postgres").
 		WithEnvVariable("POSTGRES_PASSWORD", "postgres").
-		WithExposedPort(5432)
+		WithExposedPort(5432).
+		AsService()
 }

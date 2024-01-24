@@ -7,5 +7,5 @@
     "paths": {
       "@dagger.io/dagger": ["./sdk"]
     }
-  },
+  }
 }
