@@ -19,10 +19,10 @@ func (c *Ci) Serve(ctx context.Context, dir *Directory) (*Service, error) {
 
 	// Seed initial data
 // This causes a failure: https://github.com/dagger/dagger/issues/6493
-//	_, err := dag.Seed().Run(dir.Directory("seed-data"), vote).Sync(ctx)
-//	if err != nil {
-//		return nil, err
-//	}
+	_, err := dag.Seed().Run(dir.Directory("seed-data"), vote).Sync(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	proxy := dag.Proxy().
 		WithService(vote, "vote", 5000, 80).
