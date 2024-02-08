@@ -1,4 +1,5 @@
 {
   "name": "vote",
-  "sdk": "python"
+  "sdk": "python",
+  "source": "."
 }

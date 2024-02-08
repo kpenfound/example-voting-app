@@ -1,4 +1,5 @@
 {
   "name": "result",
-  "sdk": "typescript"
+  "sdk": "typescript",
+  "source": "."
 }

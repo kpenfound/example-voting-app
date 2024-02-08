@@ -1,4 +1,5 @@
 {
   "name": "worker",
-  "sdk": "go"
+  "sdk": "go",
+  "source": "."
 }

@@ -1,4 +1,5 @@
 {
   "name": "seed",
-  "sdk": "go"
+  "sdk": "go",
+  "source": "."
 }
