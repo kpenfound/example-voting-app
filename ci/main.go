@@ -6,6 +6,7 @@ import (
 
 type Ci struct {}
 
+// Serve the whole stack locally
 func (c *Ci) Serve(ctx context.Context, dir *Directory) (*Service, error) {
 	red := redis()
 	db := postgres()
@@ -31,6 +32,29 @@ func (c *Ci) Serve(ctx context.Context, dir *Directory) (*Service, error) {
 		Service()
 
 	return proxy, nil
+}
+
+// Build the whole stack
+func (c *Ci) Build(ctx context.Context, directory *Directory) error {
+	vote := dag.Vote().Build(directory.Directory("vote"))
+	_, err := vote.Sync(ctx)
+	if err != nil {
+		return err
+	}
+
+	result := dag.Result().Build(directory.Directory("result"))
+	_, err = result.Sync(ctx)
+	if err != nil {
+		return err
+	}
+
+	worker := dag.Worker().Build(directory.Directory("worker"))
+	_, err = worker.Sync(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // A redis container

@@ -1,0 +1,12 @@
+{
+  "name": "ci",
+  "sdk": "go",
+  "dependencies": [
+    "github.com/kpenfound/dagger-modules/proxy@d5dfa6e20d26fd53246c20af721364c8f57e4b50",
+    "ci/result",
+    "ci/seed",
+    "ci/vote",
+    "ci/worker"
+  ],
+  "source": "ci"
+}
