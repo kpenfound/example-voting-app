@@ -1,10 +1,10 @@
 import { dag, Container, Directory, object, func } from "@dagger.io/dagger"
 
-@object
+@object()
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class Result {
 
-  @func
+  @func()
   build(directory: Directory): Container {
     return dag
       .container()
@@ -21,7 +21,7 @@ class Result {
       .withDirectory("/usr/local/app", directory)
   }
 
-  @func
+  @func()
   serve(dir: Directory, db: Service): Service {
     return dag
       .container()
