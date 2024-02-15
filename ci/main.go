@@ -7,20 +7,20 @@ import (
 type Ci struct {}
 
 // Serve the whole stack locally
-func (c *Ci) Serve(ctx context.Context, dir *Directory) (*Service, error) {
+func (c *Ci) Serve(ctx context.Context, directory *Directory) (*Service, error) {
 	red := redis()
 	db := postgres()
 
 	// Vote needs redis
-	vote := dag.Vote().Serve(dir.Directory("vote"), red)
+	vote := dag.Vote().Serve(directory.Directory("vote"), red)
 	// Result needs postgres
-	result := dag.Result().Serve(dir.Directory("result"), db)
+	result := dag.Result().Serve(directory.Directory("result"), db)
 	// Worker needs redis and postgres
-	worker := dag.Worker().Serve(dir.Directory("worker"), red, db)
+	worker := dag.Worker().Serve(directory.Directory("worker"), red, db)
 
 	// Seed initial data
 // This causes a failure: https://github.com/dagger/dagger/issues/6493
-	_, err := dag.Seed().Run(dir.Directory("seed-data"), vote).Sync(ctx)
+	_, err := dag.Seed().Run(directory.Directory("seed-data"), vote).Sync(ctx)
 	if err != nil {
 		return nil, err
 	}
