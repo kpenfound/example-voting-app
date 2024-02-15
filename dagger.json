@@ -3,6 +3,10 @@
   "sdk": "go",
   "dependencies": [
     {
+      "name": "ruff",
+      "source": "github.com/kpenfound/dagger-modules/ruff@5cb802660efb1242e5d7beb382f772f0a3f34616"
+    },
+    {
       "name": "proxy",
       "source": "github.com/kpenfound/dagger-modules/proxy@d5dfa6e20d26fd53246c20af721364c8f57e4b50"
     },
@@ -23,5 +27,6 @@
       "source": "ci/worker"
     }
   ],
-  "source": "ci"
+  "source": "ci",
+  "engineVersion": "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 }
