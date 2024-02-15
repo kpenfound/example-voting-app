@@ -18,13 +18,6 @@ func (c *Ci) Serve(ctx context.Context, directory *Directory) (*Service, error) 
 	// Worker needs redis and postgres
 	worker := dag.Worker().Serve(directory.Directory("worker"), red, db)
 
-	// Seed initial data
-// This causes a failure: https://github.com/dagger/dagger/issues/6493
-	_, err := dag.Seed().Run(directory.Directory("seed-data"), vote).Sync(ctx)
-	if err != nil {
-		return nil, err
-	}
-
 	proxy := dag.Proxy().
 		WithService(vote, "vote", 5000, 80).
 		WithService(result, "result", 5001, 80).
