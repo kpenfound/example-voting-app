@@ -1,5 +1,6 @@
 {
   "name": "result",
   "sdk": "typescript",
-  "source": "."
+  "source": ".",
+  "engineVersion": "v0.9.11"
 }

@@ -1,5 +1,6 @@
 {
   "name": "seed",
   "sdk": "go",
-  "source": "."
+  "source": ".",
+  "engineVersion": "v0.9.11"
 }

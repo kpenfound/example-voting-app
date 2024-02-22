@@ -1,5 +1,6 @@
 {
   "name": "worker",
   "sdk": "go",
-  "source": "."
+  "source": ".",
+  "engineVersion": "v0.9.11"
 }

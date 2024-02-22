@@ -1,5 +1,6 @@
 {
   "name": "vote",
   "sdk": "python",
-  "source": "."
+  "source": ".",
+  "engineVersion": "v0.9.11"
 }
